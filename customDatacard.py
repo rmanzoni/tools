@@ -58,12 +58,13 @@ for category in av :
   for k1 in dirList:
     h1 = k1.ReadObj()
     hh = dc(h1)
+    sum_vh = []
     if 'ZTT' in hh.GetName() or 'QCD' in hh.GetName() :
       for bin in range(hh.GetNbinsX()+1) :
         if hh.GetBinError(bin) == 0 :
           hh.SetBinError(bin, 1.)
     if h1.GetName() in ['ttH','WH','ZH'] and options.vh :
-      sum_vh.append(dc(h2))
+      sum_vh.append(dc(h1))
       continue
     if options.vh :
       vh = dc(sum_vh[0])
