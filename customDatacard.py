@@ -16,10 +16,11 @@ parser.add_option("-N", "--shift" , dest = "shift" ,  help = "save the up, down 
 parser.add_option("-S", "--susy"  , dest = "susy"  ,  help = "susy datacard. Default is False"              , default = False      )
 parser.add_option("-F", "--file"  , dest = "file"  ,  help = "filename. Default is '' "                     , default = ''         )
 parser.add_option("-M", "--mass"  , dest = "mass"  ,  help = "mass. Default is svfitMass, optional visMass" , default = 'svfitMass')
-parser.add_option("-V", "--vh"    , dest = "vh"    ,  help = "merge ttH, WH and ZH into VH"                 , default = False      )
+parser.add_option("-V", "--vh"    , dest = "vh"    ,  help = "merge ttH, WH and ZH into VH"                 , default = True      )
 
 (options,av) = parser.parse_args()
 
+#print 'Merge VH ? ', options.vh
 print av
 print options
 
@@ -55,24 +56,31 @@ for category in av :
   dir = 'tauTau_'+cat
   f1.cd(dir)
   dirList = gDirectory.GetListOfKeys()
+  sum_vh = []
+  
   for k1 in dirList:
     h1 = k1.ReadObj()
     hh = dc(h1)
-    sum_vh = []
+
     if 'ZTT' in hh.GetName() or 'QCD' in hh.GetName() :
       for bin in range(hh.GetNbinsX()+1) :
         if hh.GetBinError(bin) == 0 :
           hh.SetBinError(bin, 1.)
-    if h1.GetName() in ['ttH','WH','ZH'] and options.vh :
+    print h1.GetName()
+    if (h1.GetName()=='ttH125' or h1.GetName()=='WH125' or h1.GetName()=='ZH125') and options.vh :
       sum_vh.append(dc(h1))
       continue
-    if options.vh :
-      vh = dc(sum_vh[0])
-      vh.Add(sum_vh[1])
-      vh.Add(sum_vh[2])
-      vh.SetName('VH')
-      hists[cat_name].append(vh)
+
     hists[cat_name].append(hh)
+    
+  if options.vh :
+    vh = dc(sum_vh[0])
+    vh.Add(sum_vh[1])
+    vh.Add(sum_vh[2])
+    vh.SetName('VH125')
+    hists[cat_name].append(vh)
+
+
   f1.Close()
 
 
@@ -82,6 +90,7 @@ for category in av :
     f2.cd(dir)
     dirList = gDirectory.GetListOfKeys()
     sum_vh = []
+
     for k2 in dirList:
       h2 = k2.ReadObj()
       if 'ZTT' in h2.GetName() or \
@@ -93,18 +102,19 @@ for category in av :
          'ttH' in h2.GetName() or \
          'bbH' in h2.GetName() or \
          'QCD' in h2.GetName() :
-        if h2.GetName() in ['ttH','WH','ZH'] and options.vh :
+        if (h2.GetName()=='ttH125' or h2.GetName()=='WH125' or h2.GetName()=='ZH125') and options.vh :
           sum_vh.append(dc(h2))
           continue
         hh = dc(h2)
         hh.SetName(hh.GetName()+'_CMS_scale_t_tautau_8TeVUp')
         hists[cat_name].append(hh)
-      if options.vh :
-        vh = dc(sum_vh[0])
-        vh.Add(sum_vh[1])
-        vh.Add(sum_vh[2])
-        vh.SetName('VH_CMS_scale_t_tautau_8TeVUp')
-        hists[cat_name].append(vh)
+
+    if options.vh :
+      vh = dc(sum_vh[0])
+      vh.Add(sum_vh[1])
+      vh.Add(sum_vh[2])
+      vh.SetName('VH125_CMS_scale_t_tautau_8TeVUp')
+      hists[cat_name].append(vh)
     f2.Close()
 
     f3 = TFile(cat_fold+'_down/'+cat_fold+'_down_tauTau_'+cat+'_'+options.mass+'.root','read')
@@ -123,18 +133,18 @@ for category in av :
          'ttH' in h3.GetName() or \
          'bbH' in h3.GetName() or \
          'QCD' in h3.GetName() :
-        if h3.GetName() in ['ttH','WH','ZH'] and options.vh :
-          sum_vh.append(dc(h2))
+        if (h3.GetName()=='ttH125' or h3.GetName()=='WH125' or h3.GetName()=='ZH125') and options.vh :
+          sum_vh.append(dc(h3))
           continue
         hh = dc(h3)
         hh.SetName(hh.GetName()+'_CMS_scale_t_tautau_8TeVDown')
         hists[cat_name].append(hh)
-      if options.vh :
-        vh = dc(sum_vh[0])
-        vh.Add(sum_vh[1])
-        vh.Add(sum_vh[2])
-        vh.SetName('VH_CMS_scale_t_tautau_8TeVDown')
-        hists[cat_name].append(vh)
+    if options.vh :
+      vh = dc(sum_vh[0])
+      vh.Add(sum_vh[1])
+      vh.Add(sum_vh[2])
+      vh.SetName('VH125_CMS_scale_t_tautau_8TeVDown')
+      hists[cat_name].append(vh)
     f3.Close()
 
 #print [ h.GetName() for h in hists['boost_tight']]
