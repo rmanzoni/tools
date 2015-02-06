@@ -1,0 +1,33 @@
+[user]
+	name = Riccardo
+	email = riccardo.manzoni@cern.ch
+	github = rmanzoni
+[alias]
+	a = add
+	ap = add --patch
+	am = am -s
+	c = commit -s
+	ca = commit -s --amend
+	co = checkout
+	b = branch -vv
+	l = log --graph --all --abbrev-commit --date=relative --format=format:'%C(bold blue)%h%C(reset) %C(green)%ar %C(yellow)%an%C(bold yellow)%d%C(reset)%n        %C(white)%s%n'
+	lt = log --graph --abbrev-commit --date=relative --format=format:'%C(bold blue)%h%C(reset) %C(green)%ar %C(yellow)%an%C(bold yellow)%d%C(reset)%n        %C(white)%s%n'
+	lf = log --pretty=fuller
+	s = status
+	d = diff
+	ds = diff --stat
+	dc = diff --cached
+	dcs = diff --cached --stat
+	dp = show
+	dhh = diff HEAD^!
+	dhhs = diff HEAD^! --stat
+	doh = diff origin/master HEAD
+	dohs = diff origin/master HEAD --stat
+	rb = rebase
+	rbi = rebase -i
+	rbio = rebase -i origin/master
+	t = tag -a
+	tl = tag -ln1
+
+[color]
+	ui = true
