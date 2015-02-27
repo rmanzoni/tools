@@ -10,6 +10,10 @@ collection = product( ['mt','et','tt'],
 for i in collection :
   integral = myGet.getContributionUnc(i[0],i[1],i[2])[0]
   error    = myGet.getContributionUnc(i[0],i[1],i[2])[1]
+  
+#   if error/integral < 0.05 :
+#     continue
+    
   print '\n', i[0],i[1],i[2]
   print 'integral %.2f +/- %.2f' % (integral, error) 
   print 'relative error %.2f%s' % ( error/integral, '%' )
