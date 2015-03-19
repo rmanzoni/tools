@@ -31,3 +31,6 @@
 
 [color]
 	ui = true
+
+[help]
+  autocorrect = 1
